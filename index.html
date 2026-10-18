@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f7a8cf">
+  <title>Meu Mundinho de Desenhos 💖</title>
+  <style>
+    :root {
+      --pink: #e65399;
+      --pink-dark: #b93678;
+      --pink-light: #fff0f7;
+      --purple: #9270c8;
+      --ink: #653b58;
+      --muted: #946d87;
+      --white: #ffffff;
+      --gold: #ffc94f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Trebuchet MS", Arial, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 10% 10%, #fff 0 3px, transparent 4px),
+        radial-gradient(circle at 90% 22%, #fff 0 4px, transparent 5px),
+        linear-gradient(145deg, #ffe0ef, #eee5ff 55%, #fff2cb);
+      background-size: 45px 45px, 60px 60px, auto;
+    }
+    header { text-align: center; padding: 34px 16px 20px; }
+    .ribbon { font-size: 28px; }
+    h1 {
+      color: var(--pink-dark);
+      font-size: clamp(27px, 6vw, 43px);
+      line-height: 1.15;
+      margin: 8px 0 10px;
+      text-shadow: 0 2px 0 white;
+    }
+    header p { margin: 7px auto; max-width: 650px; line-height: 1.5; }
+    .container { width: min(1000px, 93%); margin: 0 auto 30px; }
+    .intro, .results, .secret-card {
+      background: rgba(255,255,255,.91);
+      border: 2px solid rgba(255,255,255,.95);
+      border-radius: 24px;
+      box-shadow: 0 8px 24px rgba(151, 76, 125, .10);
+    }
+    .intro { text-align: center; padding: 18px; margin-bottom: 18px; line-height: 1.55; }
+    .section-title { text-align: center; color: var(--pink-dark); margin: 24px 0 14px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; }
+    .card {
+      background: white;
+      border: 2px solid #ffd1e5;
+      border-radius: 22px;
+      padding: 18px 12px 15px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(160, 73, 125, .08);
+      transition: transform .15s, box-shadow .15s;
+    }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 9px 20px rgba(160, 73, 125, .14); }
+    .character { font-size: 45px; line-height: 1.2; }
+    .card h3 { margin: 10px 0 12px; font-size: 17px; min-height: 40px; display: grid; place-items: center; }
+    .hint { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+    .ratings { display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px; }
+    .rate-btn {
+      border: 1px solid #f7c3dc;
+      border-radius: 10px;
+      background: #fff4f9;
+      color: var(--pink-dark);
+      padding: 8px 0;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform .12s, background .12s;
+    }
+    .rate-btn:hover { transform: scale(1.06); }
+    .rate-btn.selected { background: var(--gold); color: #714a00; border-color: #e8ad26; }
+    .note-label { min-height: 36px; margin-top: 10px; font-size: 13px; font-weight: bold; color: var(--pink-dark); }
+    .secret-card { margin-top: 18px; padding: 20px; text-align: center; border: 2px dashed #c9a0e5; background: #fffaff; }
+    .secret-card h2 { color: var(--purple); margin: 8px 0; }
+    .secret-card p { margin: 8px auto 14px; line-height: 1.5; }
+    .secret-card .ratings { max-width: 400px; margin: auto; }
+    .results { padding: 22px; margin-top: 20px; }
+    .results h2 { text-align: center; color: var(--pink-dark); margin-top: 0; }
+    #summary { text-align: center; color: var(--muted); }
+    #result-list { padding-left: 0; list-style: none; max-width: 600px; margin: 15px auto; }
+    #result-list li { padding: 10px 12px; margin: 7px 0; background: #fff4f9; border-radius: 12px; }
+    .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 18px; }
+    .action {
+      border: 0; border-radius: 999px; padding: 12px 18px; cursor: pointer;
+      background: var(--pink); color: white; font-size: 15px; font-weight: bold;
+      box-shadow: 0 4px 0 #bd3979;
+    }
+    .action:hover { filter: brightness(1.04); }
+    .action:active { transform: translateY(2px); box-shadow: 0 2px 0 #bd3979; }
+    .action.purple { background: var(--purple); box-shadow: 0 4px 0 #7150a7; }
+    .action.light { background: #fff0f7; color: var(--pink-dark); box-shadow: 0 4px 0 #edc0d8; }
+    .message { min-height: 22px; text-align: center; color: var(--purple); font-size: 13px; margin-top: 12px; }
+    footer { text-align: center; padding: 8px 16px 28px; color: #8b6680; font-size: 13px; }
+    button:focus-visible { outline: 3px solid #75479a; outline-offset: 3px; }
+    @media (max-width: 420px) {
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .card { padding: 15px 8px 12px; }
+      .card h3 { font-size: 15px; }
+      .rate-btn { padding: 8px 0; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="ribbon" aria-hidden="true">🎀 ✨ 💗 ✨ 🎀</div>
+    <h1>Meu Mundinho de Desenhos</h1>
+    <p>Um cantinho fofo para avaliar seus desenhos favoritos!</p>
+    <p>Escolha uma nota de 1 a 10. Você pode mudar sua nota quando quiser. ⭐</p>
+  </header>
+
+  <main class="container">
+    <section class="intro">
+      🌷 <strong>Como funciona?</strong><br>
+      Toque em um número para dar sua nota. No final, veja todas as avaliações e compartilhe o resultado! 💌
+    </section>
+
+    <h2 class="section-title">🌈 Escolha um desenho 🌈</h2>
+    <section class="grid" id="drawings" aria-label="Desenhos para avaliar"></section>
+
+    <section class="secret-card">
+      <div class="character" aria-hidden="true">🫡💻</div>
+      <h2>Nota secreta do mero soldado</h2>
+      <p>Seu mero soldado ficou com preguiça de colocar mais opções.<br>Descarregue seu estresse e dê uma nota para o projeto que ele te fez! 😂💖</p>
+      <div class="ratings" id="secret-ratings" aria-label="Nota do programador"></div>
+      <div class="note-label" id="secret-label" aria-live="polite">Ainda sem nota 💌</div>
+    </section>
+
+    <section class="results" id="results">
+      <h2>💕 Suas avaliações 💕</h2>
+      <p id="summary">Você ainda não avaliou nenhum desenho!</p>
+      <ul id="result-list"></ul>
+      <div class="actions">
+        <button class="action" id="share-btn">💌 Compartilhar resultado</button>
+        <button class="action purple" id="finish-btn">🏁 Finalizar avaliações</button>
+        <button class="action light" id="reset-btn">🔄 Recomeçar</button>
+      </div>
+      <p class="message" id="message" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer>Feito com carinho, estrelinhas e um pouquinho de código 💗</footer>
+
+  <script>
+    // Estas opções seguem os cases do seu programa Java.
+    const desenhos = [
+      { id: "lady", nome: "Miraculous Ladybug", emoji: "🐞" },
+      { id: "rebelde", nome: "Rebelde", emoji: "🎤" },
+      { id: "chica", nome: "Chica Vampiro", emoji: "🧛‍♀️" },
+      { id: "moranguinho", nome: "Moranguinho", emoji: "🍓" },
+      { id: "frozen", nome: "Frozen", emoji: "❄️" },
+      { id: "monster", nome: "Monster High", emoji: "🦇" },
+      { id: "hello", nome: "Hello Kitty", emoji: "🎀" }
+    ];
+
+    // Equivalentes às variáveis double do Java.
+    const notas = {
+      lady: 0,
+      rebelde: 0,
+      chica: 0,
+      moranguinho: 0,
+      frozen: 0,
+      monster: 0,
+      hello: 0,
+      mero: 0
+    };
+
+    function criarBotoesDeNota(valorAtual, aoEscolher) {
+      const area = document.createElement("div");
+      area.className = "ratings";
+
+      for (let n = 1; n <= 10; n++) {
+        const botao = document.createElement("button");
+        botao.type = "button";
+        botao.className = "rate-btn" + (n === valorAtual ? " selected" : "");
+        botao.textContent = n;
+        botao.setAttribute("aria-label", "Dar nota " + n);
+        botao.setAttribute("aria-pressed", n === valorAtual ? "true" : "false");
+        botao.addEventListener("click", () => aoEscolher(n));
+        area.appendChild(botao);
+      }
+      return area;
+    }
+
+    function montarDesenhos() {
+      const grade = document.getElementById("drawings");
+      grade.replaceChildren();
+
+      desenhos.forEach(desenho => {
+        const card = document.createElement("article");
+        card.className = "card";
+
+        const emoji = document.createElement("div");
+        emoji.className = "character";
+        emoji.setAttribute("aria-hidden", "true");
+        emoji.textContent = desenho.emoji;
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = desenho.nome;
+
+        const dica = document.createElement("p");
+        dica.className = "hint";
+        dica.textContent = "Escolha de 1 a 10";
+
+        const nota = document.createElement("div");
+        nota.className = "note-label";
+        nota.id = "label-" + desenho.id;
+        nota.setAttribute("aria-live", "polite");
+
+        const botoes = criarBotoesDeNota(notas[desenho.id], valor => {
+          notas[desenho.id] = valor;
+          atualizarResultados();
+          montarDesenhos();
+        });
+
+        card.append(emoji, titulo, dica, botoes, nota);
+        grade.appendChild(card);
+      });
+
+      const areaSecreta = document.getElementById("secret-ratings");
+      areaSecreta.replaceChildren(
+        criarBotoesDeNota(notas.mero, valor => {
+          notas.mero = valor;
+          atualizarResultados();
+          montarDesenhos();
+        })
+      );
+    }
+
+    function atualizarResultados() {
+      let quantidade = 0;
+      const lista = document.getElementById("result-list");
+      lista.replaceChildren();
+
+      desenhos.forEach(desenho => {
+        const valor = notas[desenho.id];
+        const label = document.getElementById("label-" + desenho.id);
+
+        if (label) {
+          label.textContent = valor > 0 ? "Sua nota: " + valor + "/10 ⭐" : "Ainda sem nota 💌";
+        }
+
+        if (valor > 0) {
+          quantidade++;
+          const item = document.createElement("li");
+          item.textContent = desenho.emoji + " " + desenho.nome + ": " + valor + "/10 ⭐";
+          lista.appendChild(item);
+        }
+      });
+
+      const resumo = document.getElementById("summary");
+      resumo.textContent = quantidade === 0
+        ? "Você ainda não avaliou nenhum desenho!"
+        : "Você avaliou " + quantidade + " de " + desenhos.length + " desenhos! 💖";
+
+      document.getElementById("secret-label").textContent =
+        notas.mero > 0 ? "Nota do mero soldado: " + notas.mero + "/10 💻" : "Ainda sem nota 💌";
+
+      if (notas.mero > 0) {
+        const item = document.createElement("li");
+        item.textContent = "🫡 Esforço do seu mero soldado: " + notas.mero + "/10 💻";
+        lista.appendChild(item);
+      }
+    }
+
+    function textoDoResultado() {
+      const linhas = [];
+      desenhos.forEach(desenho => {
+        if (notas[desenho.id] > 0) {
+          linhas.push(desenho.nome + ": " + notas[desenho.id] + "/10");
+        }
+      });
+      if (notas.mero > 0) {
+        linhas.push("Esforço do seu mero soldado: " + notas.mero + "/10");
+      }
+      return "💕 MINHAS AVALIAÇÕES 💕\n\n" +
+        (linhas.length ? linhas.join("\n") : "Ainda não dei nenhuma nota.") +
+        "\n\nFeito com carinho 🎀";
+    }
+
+    async function compartilhar() {
+      const texto = textoDoResultado();
+      const mensagem = document.getElementById("message");
+
+      if (navigator.share) {
+        try {
+          await navigator.share({ title: "Minhas avaliações 💖", text: texto });
+          mensagem.textContent = "Prontinho! Você compartilhou suas avaliações. 💌";
+        } catch (erro) {
+          if (erro.name !== "AbortError") mensagem.textContent = "Não foi possível abrir o compartilhamento. Você pode copiar o resultado.";
+        }
+      } else {
+        try {
+          await navigator.clipboard.writeText(texto);
+          mensagem.textContent = "Resultado copiado! Agora é só colar no WhatsApp. 💖";
+        } catch (erro) {
+          window.prompt("Copie o resultado e cole no WhatsApp:", texto);
+        }
+      }
+    }
+
+    function finalizar() {
+      const mensagem = document.getElementById("message");
+      const quantidade = desenhos.filter(desenho => notas[desenho.id] > 0).length;
+      if (quantidade === 0 && notas.mero === 0) {
+        mensagem.textContent = "Escolha pelo menos uma nota antes de finalizar! 🌷";
+        return;
+      }
+      mensagem.textContent = "Avaliações finalizadas! Confira a lista abaixo e toque em compartilhar para enviar. 💖";
+      document.getElementById("results").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function recomeçar() {
+      if (!window.confirm("Quer apagar todas as notas e começar de novo?")) return;
+      Object.keys(notas).forEach(chave => notas[chave] = 0);
+      document.getElementById("message").textContent = "";
+      montarDesenhos();
+      atualizarResultados();
+    }
+
+    document.getElementById("share-btn").addEventListener("click", compartilhar);
+    document.getElementById("finish-btn").addEventListener("click", finalizar);
+    document.getElementById("reset-btn").addEventListener("click", recomeçar);
+
+    montarDesenhos();
+    atualizarResultados();
+  </script>
+</body>
+</html>
